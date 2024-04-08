@@ -1,4 +1,4 @@
-
+package engine;
 
 public class EmailSender {
     //Configuring email sending parameters
