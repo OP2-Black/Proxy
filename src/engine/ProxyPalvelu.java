@@ -14,9 +14,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 public class ProxyPalvelu {
 
     private List<Airport> airportList;
@@ -31,10 +28,11 @@ public class ProxyPalvelu {
     public void aja() {
 
         EmailLogic emailLogic = new EmailLogic();
+        JsonOutput jsonOutput = new JsonOutput();
 
         try {
 
-            //Connects to kanair and fetches its HTML document.
+            // Connects to kanair and fetches its HTML document.
             Document doc = Jsoup.connect("https://www.kanair.fi/category/10/ilmailupolttoaineet--aviation-fuel")
                     .get();
             airportList.clear();
@@ -57,7 +55,7 @@ public class ProxyPalvelu {
             // Iterating over each row to fetch airport and fuel price data.
             for (Element row : rows) {
                 Elements columns = row.select("td");
-                if (columns.size() >= 6) {  // Ensures the row has a sufficient number of columns.
+                if (columns.size() >= 6) { // Ensures the row has a sufficient number of columns.
                     String pouserStatus = columns.get(0).text().trim();
                     String airportCode = columns.get(1).text().trim();
 
@@ -107,6 +105,7 @@ public class ProxyPalvelu {
             emailLogic.addError();
         } else {
             emailLogic.resetCounter();
+            jsonOutput.generateJsonOutput(airportList);
         }
     }
 
@@ -116,9 +115,10 @@ public class ProxyPalvelu {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String timeString = timestamp.format(formatter);
 
-        try (FileWriter writer = new FileWriter("/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/log.txt", true)) {
-            
-           // Writes log message with timestamp.
+        try (FileWriter writer = new FileWriter("log.txt",
+                true)) {
+
+            // Writes log message with timestamp.
             writer.write("[" + timeString + "] " + message + "\n");
 
             // Retrieves and logs the stack trace to help trace the source of the message.
@@ -135,77 +135,10 @@ public class ProxyPalvelu {
         }
     }
 
-    // Method to save JSON representation of data into a file.
-    private void saveJsonInFile(String data, String file) {
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write(data);
-        } catch (IOException e) {
-            System.out.println("Error while saving the Json object to a file: " + e.getMessage());
-        }
-    }
-
-    // Generates JSON output from the current data and saves it.
-    public String generateJsonOutput() {
-        if (!fetchSuccessful) {
-            System.out.println("Data wasn't updated, fetch was unsuccessful");
-            return "";
-        }
-
-        // Configures Gson for pretty printing and registers a custom adapter for
-        // LocalDateTime.
-
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .create();
-
-        LocalDateTime date = LocalDateTime.now();
-        TimeStamp timeStamp = new TimeStamp(date);
-
-        // Creates a JSON output object containing timestamps and airport list.
-        JsonOutput jsonOutput = new JsonOutput(timeStamp, airportList);
-        String jsonData = gson.toJson(jsonOutput);
-
-        // Add headers
-        String header = "Content-Type: application/json\n"
-        + "Access-Control-Allow-Origin: *\n"
-        + "Access-Control-Allow-Methods: GET, POST, OPTIONS\n"
-        + "Access-Control-Allow-Headers: Content-Type\n";
-        
-        System.out.println(jsonData);
-
-        // Saves the JSON data into two files, a primary and a backup.
-        saveJsonInFile(jsonData, "/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/data.json");
-        saveJsonInFile(jsonData, "/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/data.json.bak");
-
-        return header + jsonData;
-    }
-
     // Main method to run the scraping process and generate JSON output.
     public static void main(String[] args) {
         ProxyPalvelu olio = new ProxyPalvelu();
         olio.aja(); // Starts the data fetching process.
-        String jsonOutput = olio.generateJsonOutput(); // Generates JSON from the fetched data.
-        System.out.println(jsonOutput); // Prints the JSON output to console.
     }
 
-    // Inner class to structure the JSON output.
-    static class JsonOutput {
-        private TimeStamp timeStamp;
-        private List<Airport> airportList;
-
-        public JsonOutput(TimeStamp timeStamp, List<Airport> airportList) {
-            this.timeStamp = timeStamp;
-            this.airportList = airportList;
-        }
-
-        // Getter methods for accessing properties.
-        public List<Airport> getAirportList() {
-            return this.airportList;
-        }
-
-        public TimeStamp getTimeStamp() {
-            return this.timeStamp;
-        }
-    }
 }

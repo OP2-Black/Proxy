@@ -1,2 +1,8 @@
 [2024-03-08 18:07:53] Fetch was successful.
    at engine.ProxyPalvelu.aja(ProxyPalvelu.java:84)
+[2024-05-06 16:24:25] Fetch was successful.
+   at engine.ProxyPalvelu.aja(ProxyPalvelu.java:94)
+[2024-05-06 16:25:03] Fetch was successful.
+   at engine.ProxyPalvelu.aja(ProxyPalvelu.java:94)
+[2024-05-06 16:25:17] Fetch was successful.
+   at engine.ProxyPalvelu.aja(ProxyPalvelu.java:94)
