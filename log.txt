@@ -6,3 +6,5 @@
    at engine.ProxyPalvelu.aja(ProxyPalvelu.java:94)
 [2024-05-06 16:25:17] Fetch was successful.
    at engine.ProxyPalvelu.aja(ProxyPalvelu.java:94)
+[2024-05-06 16:29:47] Fetch was successful.
+   at engine.ProxyPalvelu.aja(ProxyPalvelu.java:94)
