@@ -41,8 +41,8 @@ public class JsonOutput {
         System.out.println(jsonData);
 
         // Saves the JSON data into two files, a primary and a backup.
-        saveJsonInFile(jsonData, "data.json");
-        saveJsonInFile(jsonData, "data.json.bak");
+        saveJsonInFile(jsonData, "/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/data.json");
+        saveJsonInFile(jsonData, "/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/data.json.bak");
 
         return jsonData;
     }

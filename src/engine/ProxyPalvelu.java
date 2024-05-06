@@ -115,7 +115,7 @@ public class ProxyPalvelu {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String timeString = timestamp.format(formatter);
 
-        try (FileWriter writer = new FileWriter("log.txt",
+        try (FileWriter writer = new FileWriter("/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/log.txt",
                 true)) {
 
             // Writes log message with timestamp.

@@ -12,11 +12,11 @@ public class EmailLogic {
 
     private String errorCountString = "";
 
-    String logContent = readLastLines("log.txt", 10);
+    String logContent = readLastLines("/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/log.txt", 10);
     String emailBody = "Error occurred! Last 10 lines of log:\n" + logContent;
 
     private void readFile() {
-        File file = new File("errorCounter.txt");
+        File file = new File("/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/javat/errorCounter.txt");
         int ch;
 
         FileReader fr = null;
@@ -61,7 +61,7 @@ public class EmailLogic {
 
     private void updateCounter(String errorCountString) {
         try (FileWriter writer = new FileWriter(
-                "errorCounter.txt", false)) {
+                "/var/www/10/jtjuslin/sites/jtjuslin.kapsi.fi/www/kananen/javat/errorCounter.txt", false)) {
             writer.write(errorCountString);
         } catch (IOException e) {
             System.out.println("Error while counting: " + e.getMessage());
