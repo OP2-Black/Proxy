@@ -83,3 +83,5 @@ Komento:
 ```bash
 1,15,30,45 * * * * cd /home/users/jtjuslin/www/kananen/javat/lib/; java ProxyPalvelu > /home/users/jtjuslin/www/kananen/data.json
 ```
+
+Loppuraportti: https://github.com/OP2-Black/Proxy/blob/0e3f55e202419e76ca279f98dbccee58af0c1973/Loppuraportti.md
