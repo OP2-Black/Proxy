@@ -1,4 +1,4 @@
-# FrontEnd
+# Proxy
 # Lentopaikat.fi sovelluksen kehitys
 
 Kehittäjät:
